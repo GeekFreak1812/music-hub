@@ -8,11 +8,7 @@
     },
     "nftune_frontend": {
       "type": "assets",
-<<<<<<< HEAD
       "source": ["frontend"]
-=======
-      "source": ["frontend/dist"]
->>>>>>> 9d18ed1608118b241356f7df191cc58c996d54b9
     },
     "internet_identity": {
       "type": "pull",

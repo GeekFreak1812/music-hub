@@ -1,65 +1,40 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import ProtectedRoute from './components/ProtectRoute'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import Projects from './pages/Projects'
-import ProjectDetail from './pages/ProjectDetail'
-import Studio from './pages/Studio'
-import Profile from './pages/Profile'
-import NFTMarketplace from './pages/NFTMarketplace'
-import CreateNFT from './pages/CreateNFT'
 
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/marketplace" element={<NFTMarketplace />} />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/projects" element={
-          <ProtectedRoute>
-            <Projects />
-          </ProtectedRoute>
-        } />
-        <Route path="/projects/:id" element={
-          <ProtectedRoute>
-            <ProjectDetail />
-          </ProtectedRoute>
-        } />
-        <Route path="/projects/:projectId/nft/create" element={
-          <ProtectedRoute>
-            <CreateNFT />
-          </ProtectedRoute>
-        } />
-        <Route path="/studio" element={
-          <ProtectedRoute>
-            <Studio />
-          </ProtectedRoute>
-        } />
-        <Route path="/studio/:id" element={
-          <ProtectedRoute>
-            <Studio />
-          </ProtectedRoute>
-        } />
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } />
-      </Routes>
-    </div>
-  )
-}
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Index from "./pages/Index";
+import Studio from "./pages/Studio";
+import Collaborations from "./pages/Collaborations";
+import Earnings from "./pages/Earnings";
+import NotFound from "./pages/NotFound";
+import Marketplace from "./pages/Marketplace";
 
-export default App
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <div className="min-h-screen bg-black">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/studio" element={<Studio />} />
+            <Route path="/collaborations" element={<Collaborations />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/earnings" element={<Earnings />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;

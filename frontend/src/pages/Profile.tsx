@@ -1,209 +1,253 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  UserCircleIcon,
-  CameraIcon,
-  PencilIcon,
-  MusicalNoteIcon,
-  UserGroupIcon,
-  TrophyIcon
-} from '@heroicons/react/24/outline'
-import { useAuth } from '../contexts/AuthContext'
+import React, { useState } from 'react';
+import { Edit, Music, Users, Award, MapPin } from 'lucide-react';
 
-const Profile: React.FC = () => {
-  const { user } = useAuth()
-  const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    bio: 'Passionate music producer and collaborator. Love creating electronic music with organic elements.',
+const Profile = () => {
+  const [editMode, setEditMode] = useState(false);
+  const [profile, setProfile] = useState({
+    name: 'Alex Rivera',
+    bio: 'Passionate music producer with over 8 years of experience in electronic music production. Specialized in ambient, downtempo, and experimental soundscapes. I believe in the power of collaborative creation and the future of decentralized music ownership.',
     location: 'Los Angeles, CA',
-    website: 'https://mymusic.com',
-    genres: ['Electronic', 'House', 'Ambient']
-  })
+    collaborators: 47,
+    role: 'Producer & Sound Engineer',
+    wallet: '0x742d...3f1a',
+    icp: 125.67,
+  });
 
-  const stats = [
-    { name: 'Projects', value: '12', icon: MusicalNoteIcon },
-    { name: 'Collaborations', value: '28', icon: UserGroupIcon },
-    { name: 'Tracks Released', value: '45', icon: TrophyIcon },
-  ]
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    setProfile((prev) => ({
+      ...prev,
+      [name]: type === 'number' ? Number(value) : value,
+    }));
+  };
 
-  const recentTracks = [
-    { id: '1', name: 'Sunset Dreams', project: 'Summer Vibes EP', plays: 1234 },
-    { id: '2', name: 'Ocean Breeze', project: 'Summer Vibes EP', plays: 892 },
-    { id: '3', name: 'Midnight Jazz', project: 'Jazz Fusion Experiment', plays: 567 },
-  ]
-
-  const handleSave = () => {
-    // Save profile changes
-    setIsEditing(false)
-  }
+  const handleSave = () => setEditMode(false);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="card mb-8"
-        >
-          <div className="flex items-start space-x-6">
-            <div className="relative">
-              {user?.avatar_url ? (
-                <img
-                  src={user.avatar_url}
-                  alt="Profile"
-                  className="h-24 w-24 rounded-full"
-                />
-              ) : (
-                <UserCircleIcon className="h-24 w-24 text-gray-400" />
-              )}
-              <button className="absolute bottom-0 right-0 p-1 bg-primary-600 text-white rounded-full hover:bg-primary-700">
-                <CameraIcon className="h-4 w-4" />
-              </button>
+        <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 border border-gray-700/50 mb-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center">
+              <Music className="w-12 h-12 text-white" />
             </div>
-            
             <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="input-field text-2xl font-bold"
-                    />
-                  ) : (
-                    <h1 className="text-2xl font-bold text-gray-900">{formData.name}</h1>
-                  )}
-                  <p className="text-gray-600">{formData.email}</p>
-                </div>
-                <button
-                  onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                  className="btn-primary flex items-center"
-                >
-                  <PencilIcon className="h-4 w-4 mr-2" />
-                  {isEditing ? 'Save' : 'Edit Profile'}
-                </button>
-              </div>
-              
-              <div className="mt-4">
-                {isEditing ? (
-                  <textarea
-                    value={formData.bio}
-                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="input-field w-full"
-                    rows={3}
+              <div className="flex items-center gap-4 mb-2">
+                {editMode ? (
+                  <input
+                    name="name"
+                    value={profile.name}
+                    onChange={handleChange}
+                    className="text-3xl font-bold text-white bg-transparent border-b border-cyan-400 outline-none"
                   />
                 ) : (
-                  <p className="text-gray-700">{formData.bio}</p>
+                  <h1 className="text-3xl font-bold text-white">{profile.name}</h1>
+                )}
+                <button
+                  className="p-2 text-gray-400 hover:text-cyan-400 transition-colors"
+                  onClick={() => setEditMode((v) => !v)}
+                >
+                  <Edit className="w-5 h-5" />
+                </button>
+                {editMode && (
+                  <button
+                    className="ml-2 px-3 py-1 bg-cyan-500 text-white rounded hover:bg-cyan-600"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </button>
                 )}
               </div>
-              
-              <div className="mt-4 flex flex-wrap gap-2">
-                {formData.genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm"
-                  >
-                    {genre}
+              {editMode ? (
+                <input
+                  name="role"
+                  value={profile.role}
+                  onChange={handleChange}
+                  className="text-gray-400 mb-4 bg-transparent border-b border-cyan-400 outline-none"
+                />
+              ) : (
+                <p className="text-gray-400 mb-4">{profile.role}</p>
+              )}
+              <div className="flex items-center gap-4 text-sm text-gray-400">
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4" />
+                  {editMode ? (
+                    <input
+                      name="location"
+                      value={profile.location}
+                      onChange={handleChange}
+                      className="bg-transparent border-b border-cyan-400 outline-none text-white"
+                    />
+                  ) : (
+                    <span>{profile.location}</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  {editMode ? (
+                    <input
+                      name="collaborators"
+                      type="number"
+                      value={profile.collaborators}
+                      onChange={handleChange}
+                      className="bg-transparent border-b border-cyan-400 outline-none text-white w-16"
+                    />
+                  ) : (
+                    <span>{profile.collaborators} Collaborators</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Bio */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">About</h2>
+              {editMode ? (
+                <textarea
+                  name="bio"
+                  value={profile.bio}
+                  onChange={handleChange}
+                  className="text-gray-300 leading-relaxed bg-transparent border-b border-cyan-400 outline-none w-full"
+                  rows={4}
+                />
+              ) : (
+                <p className="text-gray-300 leading-relaxed">{profile.bio}</p>
+              )}
+            </div>
+
+            {/* Recent Projects */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Recent Projects</h2>
+              <div className="space-y-4">
+                {[
+                  { title: "Midnight Vibes", status: "Active", collaborators: 4 },
+                  { title: "Cosmic Journey", status: "Completed", collaborators: 3 },
+                  { title: "Urban Echoes", status: "In Review", collaborators: 5 },
+                ].map((project, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                    <div>
+                      <h3 className="text-white font-medium">{project.title}</h3>
+                      <p className="text-gray-400 text-sm">{project.collaborators} collaborators</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      project.status === 'Active' ? 'bg-green-500/20 text-green-400' :
+                      project.status === 'Completed' ? 'bg-blue-500/20 text-blue-400' :
+                      'bg-yellow-500/20 text-yellow-400'
+                    }`}>
+                      {project.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Skills & Expertise</h2>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  'Music Production', 'Sound Design', 'Mixing', 'Mastering',
+                  'Ableton Live', 'Logic Pro', 'Synthesizers', 'Audio Engineering'
+                ].map((skill, index) => (
+                  <span key={index} className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm">
+                    {skill}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Stats */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-1"
-          >
-            <div className="card">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistics</h2>
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Stats */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Statistics</h2>
               <div className="space-y-4">
-                {stats.map((stat) => (
-                  <div key={stat.name} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <stat.icon className="h-5 w-5 text-primary-600" />
-                      <span className="text-gray-700">{stat.name}</span>
-                    </div>
-                    <span className="text-xl font-semibold text-gray-900">{stat.value}</span>
-                  </div>
-                ))}
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Projects</span>
+                  <span className="text-white font-semibold">23</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Collaborations</span>
+                  <span className="text-white font-semibold">{profile.collaborators}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Revenue</span>
+                  <span className="text-green-400 font-semibold">$12,456</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">NFTs Minted</span>
+                  <span className="text-purple-400 font-semibold">8</span>
+                </div>
               </div>
             </div>
-          </motion.div>
 
-          {/* Recent Activity */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="lg:col-span-2"
-          >
-            <div className="card">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Tracks</h2>
-              <div className="space-y-4">
-                {recentTracks.map((track) => (
-                  <div key={track.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            {/* Achievements */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Achievements</h2>
+              <div className="space-y-3">
+                {[
+                  { title: 'First Collaboration', desc: 'Completed your first project' },
+                  { title: 'Producer Pro', desc: '10+ successful projects' },
+                  { title: 'Community Builder', desc: '25+ collaborators' },
+                ].map((achievement, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                      <Award className="w-4 h-4 text-white" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">{track.name}</h3>
-                      <p className="text-sm text-gray-500">{track.project}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900">{track.plays.toLocaleString()}</p>
-                      <p className="text-xs text-gray-500">plays</p>
+                      <h3 className="text-white font-medium text-sm">{achievement.title}</h3>
+                      <p className="text-gray-400 text-xs">{achievement.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </motion.div>
-        </div>
 
-        {/* Settings */}
-        {isEditing && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="card mt-8"
-          >
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Website
-                </label>
-                <input
-                  type="url"
-                  value={formData.website}
-                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                  className="input-field"
-                />
+            {/* Wallet Info */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Wallet</h2>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-400 text-sm">Connected Wallet</p>
+                  {editMode ? (
+                    <input
+                      name="wallet"
+                      value={profile.wallet}
+                      onChange={handleChange}
+                      className="bg-transparent border-b border-cyan-400 outline-none text-cyan-400 font-mono text-sm"
+                    />
+                  ) : (
+                    <p className="text-cyan-400 font-mono text-sm">{profile.wallet}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">ICP Balance</p>
+                  {editMode ? (
+                    <input
+                      name="icp"
+                      type="number"
+                      value={profile.icp}
+                      onChange={handleChange}
+                      className="bg-transparent border-b border-cyan-400 outline-none text-white font-semibold"
+                    />
+                  ) : (
+                    <p className="text-white font-semibold">{profile.icp} ICP</p>
+                  )}
+                </div>
               </div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

@@ -1,230 +1,330 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  PlayIcon,
-  PauseIcon,
-  StopIcon,
-  MicrophoneIcon,
-  SpeakerWaveIcon,
-  AdjustmentsHorizontalIcon,
-  DocumentArrowUpIcon,
-  MusicalNoteIcon
-} from '@heroicons/react/24/outline'
 
-const Studio: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isRecording, setIsRecording] = useState(false)
-  const [currentTime, setCurrentTime] = useState('00:00')
-  const [totalTime] = useState('04:32')
+import React, { useState } from 'react';
+import { Play, Pause, Square, Mic, Headphones, Settings, Bot, Music2, MessageCircle, Users, Download, TrendingUp } from 'lucide-react';
+import WaveformVisualizer from '../components/WaveformVisualizer';
 
-  const tracks = [
-    { id: '1', name: 'Drums', volume: 75, muted: false, solo: false, color: 'bg-red-500' },
-    { id: '2', name: 'Bass', volume: 60, muted: false, solo: false, color: 'bg-blue-500' },
-    { id: '3', name: 'Guitar', volume: 80, muted: false, solo: false, color: 'bg-green-500' },
-    { id: '4', name: 'Vocals', volume: 90, muted: false, solo: false, color: 'bg-purple-500' },
-    { id: '5', name: 'Synth', volume: 65, muted: true, solo: false, color: 'bg-yellow-500' },
-  ]
+const Studio = () => {
+  const [selectedTune, setSelectedTune] = useState('ambient');
+  const [aiAssistantOpen, setAiAssistantOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [publishedStats, setPublishedStats] = useState({
+    downloads: 1247,
+    totalRevenue: 2856.50,
+    yourShare: 714.13
+  });
 
-  const effects = [
-    { name: 'Reverb', active: true },
-    { name: 'Delay', active: false },
-    { name: 'Chorus', active: true },
-    { name: 'Distortion', active: false },
-  ]
+  const tuneVarieties = [
+    { id: 'ambient', name: 'Ambient Soundscape', description: 'Ethereal pads and atmospheric textures' },
+    { id: 'electronic', name: 'Electronic Beat', description: 'Synthesized rhythms and digital sounds' },
+    { id: 'jazz', name: 'Jazz Fusion', description: 'Complex harmonies and improvisation' },
+    { id: 'rock', name: 'Rock Elements', description: 'Guitar riffs and driving rhythms' },
+    { id: 'classical', name: 'Classical Orchestra', description: 'Traditional orchestral instruments' },
+    { id: 'hip-hop', name: 'Hip-Hop Beats', description: 'Urban rhythms and bass lines' }
+  ];
+
+  const collaborators = [
+    { 
+      id: 1, 
+      name: 'Producer1', 
+      role: 'Producer', 
+      status: 'online', 
+      avatar: 'P1',
+      contribution: '25%',
+      earnings: 714.13
+    },
+    { 
+      id: 2, 
+      name: 'DrummerX', 
+      role: 'Drummer', 
+      status: 'recording', 
+      avatar: 'DX',
+      contribution: '25%',
+      earnings: 714.13
+    },
+    { 
+      id: 3, 
+      name: 'SynthMaster', 
+      role: 'Synthesist', 
+      status: 'offline', 
+      avatar: 'SM',
+      contribution: '25%',
+      earnings: 714.13
+    },
+    { 
+      id: 4, 
+      name: 'VocalArtist', 
+      role: 'Vocalist', 
+      status: 'online', 
+      avatar: 'VA',
+      contribution: '25%',
+      earnings: 714.13
+    }
+  ];
+
+  const chatMessages = [
+    { user: 'Producer1', message: 'The bass line sounds great!', time: '2m ago' },
+    { user: 'DrummerX', message: 'Should we add more reverb to the drums?', time: '5m ago' },
+    { user: 'You', message: 'Working on the melody now', time: '8m ago' }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <MusicalNoteIcon className="h-6 w-6 text-primary-400" />
-              <h1 className="text-xl font-semibold">NFTune Studio</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Studio Session</h1>
+          <p className="text-gray-400">Project: "Midnight Vibes" - Collaborative Track</p>
+        </div>
+
+        {/* Published Track Stats */}
+        <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 mb-8 border border-gray-700/50">
+          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-green-400" />
+            Published Track Performance
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Download className="w-5 h-5 text-cyan-400" />
+                <span className="text-2xl font-bold text-cyan-400">{publishedStats.downloads.toLocaleString()}</span>
+              </div>
+              <p className="text-gray-400">Total Downloads</p>
             </div>
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-300">Summer Vibes EP</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm">
-              Save
-            </button>
-            <button className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg text-sm">
-              Export
-            </button>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400 mb-2">${publishedStats.totalRevenue.toFixed(2)}</div>
+              <p className="text-gray-400">Total Revenue</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-400 mb-2">${publishedStats.yourShare.toFixed(2)}</div>
+              <p className="text-gray-400">Your Share (25%)</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex h-[calc(100vh-73px)]">
-        {/* Track Panel */}
-        <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
-          <div className="p-4 border-b border-gray-700">
-            <h2 className="text-lg font-semibold mb-4">Tracks</h2>
-            <button className="w-full flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg text-sm">
-              <DocumentArrowUpIcon className="h-4 w-4 mr-2" />
-              Add Track
-            </button>
+        {/* Transport Controls */}
+        <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 mb-8 border border-gray-700/50">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <button className="w-12 h-12 bg-cyan-500 hover:bg-cyan-600 rounded-full flex items-center justify-center transition-colors">
+                <Play className="w-6 h-6 text-white ml-1" />
+              </button>
+              <button className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors">
+                <Pause className="w-5 h-5 text-white" />
+              </button>
+              <button className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors">
+                <Square className="w-4 h-4 text-white" />
+              </button>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <span className="text-cyan-400 font-mono">00:02:34</span>
+              <span className="text-gray-500">/</span>
+              <span className="text-gray-400 font-mono">04:12</span>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <button className="p-2 text-gray-400 hover:text-cyan-400 transition-colors">
+                <Mic className="w-5 h-5" />
+              </button>
+              <button className="p-2 text-gray-400 hover:text-cyan-400 transition-colors">
+                <Headphones className="w-5 h-5" />
+              </button>
+              <button 
+                className="p-2 text-gray-400 hover:text-purple-400 transition-colors"
+                onClick={() => setAiAssistantOpen(!aiAssistantOpen)}
+              >
+                <Bot className="w-5 h-5" />
+              </button>
+              <button 
+                className="p-2 text-gray-400 hover:text-green-400 transition-colors"
+                onClick={() => setChatOpen(!chatOpen)}
+              >
+                <MessageCircle className="w-5 h-5" />
+              </button>
+              <button className="p-2 text-gray-400 hover:text-cyan-400 transition-colors">
+                <Settings className="w-5 h-5" />
+              </button>
+            </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {tracks.map((track) => (
-              <motion.div
-                key={track.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-gray-700 rounded-lg p-4"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className={`w-3 h-3 rounded-full ${track.color}`}></div>
-                    <span className="font-medium">{track.name}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <button className={`px-2 py-1 text-xs rounded ${track.muted ? 'bg-red-600' : 'bg-gray-600'}`}>
-                      M
-                    </button>
-                    <button className={`px-2 py-1 text-xs rounded ${track.solo ? 'bg-yellow-600' : 'bg-gray-600'}`}>
-                      S
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <SpeakerWaveIcon className="h-4 w-4 text-gray-400" />
-                  <div className="flex-1 bg-gray-600 rounded-full h-2">
-                    <div 
-                      className="bg-primary-500 h-2 rounded-full" 
-                      style={{ width: `${track.volume}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-gray-400 w-8">{track.volume}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <WaveformVisualizer />
         </div>
 
-        {/* Main Studio Area */}
-        <div className="flex-1 flex flex-col">
-          {/* Timeline */}
-          <div className="h-32 bg-gray-800 border-b border-gray-700 p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-sm text-gray-400">Timeline</div>
-              <div className="text-sm text-gray-300">{currentTime} / {totalTime}</div>
-            </div>
-            <div className="relative bg-gray-700 rounded-lg h-16 overflow-hidden">
-              {/* Waveform visualization */}
-              <div className="absolute inset-0 flex items-center justify-center space-x-1 px-4">
-                {[...Array(50)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-primary-400 rounded-full"
-                    style={{
-                      width: '2px',
-                      height: `${Math.random() * 40 + 10}px`,
-                      opacity: 0.7
-                    }}
-                  />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            {/* AI Tune Varieties */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <Music2 className="w-5 h-5 text-purple-400" />
+                AI Tune Varieties
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tuneVarieties.map((tune) => (
+                  <div 
+                    key={tune.id}
+                    className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                      selectedTune === tune.id 
+                        ? 'border-purple-500 bg-purple-500/20' 
+                        : 'border-gray-700/30 bg-gray-800/50 hover:border-purple-500/50'
+                    }`}
+                    onClick={() => setSelectedTune(tune.id)}
+                  >
+                    <h3 className="text-white font-medium mb-1">{tune.name}</h3>
+                    <p className="text-gray-400 text-sm">{tune.description}</p>
+                  </div>
                 ))}
               </div>
-              {/* Playhead */}
-              <div className="absolute top-0 left-1/4 w-0.5 h-full bg-white"></div>
+            </div>
+
+            {/* AI Assistant Panel */}
+            {aiAssistantOpen && (
+              <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+                <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                  <Bot className="w-5 h-5 text-purple-400" />
+                  AI Music Assistant
+                </h2>
+                <div className="space-y-4">
+                  <div className="bg-gray-800/50 rounded-lg p-4">
+                    <p className="text-gray-300 mb-3">
+                      <strong className="text-purple-400">AI:</strong> I've analyzed your current track. Here are some suggestions:
+                    </p>
+                    <ul className="space-y-2 text-sm text-gray-400">
+                      <li>• Add a low-pass filter at 2:15 to create tension</li>
+                      <li>• Consider layering the selected {tuneVarieties.find(t => t.id === selectedTune)?.name} style</li>
+                      <li>• The chord progression could benefit from a minor 7th in bar 16</li>
+                    </ul>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm">
+                      Apply Suggestions
+                    </button>
+                    <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">
+                      Generate New Ideas
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Track Layers */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Track Layers</h2>
+              
+              <div className="space-y-4">
+                {[
+                  { name: 'Bass Line', artist: 'Producer1', color: 'cyan', active: true },
+                  { name: 'Drum Kit', artist: 'DrummerX', color: 'purple', active: true },
+                  { name: 'Lead Synth', artist: 'SynthMaster', color: 'yellow', active: false },
+                  { name: 'Vocal Layer', artist: 'VocalArtist', color: 'green', active: true },
+                ].map((track, index) => (
+                  <div key={index} className="flex items-center space-x-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700/30">
+                    <div className={`w-3 h-3 rounded-full bg-${track.color}-400`}></div>
+                    <div className="flex-1">
+                      <h3 className="text-white font-medium">{track.name}</h3>
+                      <p className="text-gray-400 text-sm">by {track.artist}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                        track.active ? 'bg-cyan-500 text-white' : 'bg-gray-600 text-gray-400'
+                      }`}>
+                        <Play className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-
-          {/* Controls */}
-          <div className="bg-gray-800 border-b border-gray-700 p-4">
-            <div className="flex items-center justify-center space-x-4">
-              <button 
-                onClick={() => setIsRecording(!isRecording)}
-                className={`p-3 rounded-full ${isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-700 hover:bg-gray-600'}`}
-              >
-                <MicrophoneIcon className="h-6 w-6" />
-              </button>
-              
-              <button className="p-3 rounded-full bg-gray-700 hover:bg-gray-600">
-                <StopIcon className="h-6 w-6" />
-              </button>
-              
-              <button 
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="p-4 rounded-full bg-primary-600 hover:bg-primary-700"
-              >
-                {isPlaying ? (
-                  <PauseIcon className="h-8 w-8" />
-                ) : (
-                  <PlayIcon className="h-8 w-8" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Effects Panel */}
-          <div className="flex-1 p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-              {/* Effects */}
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4 flex items-center">
-                  <AdjustmentsHorizontalIcon className="h-5 w-5 mr-2" />
-                  Effects
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {effects.map((effect) => (
-                    <div
-                      key={effect.name}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                        effect.active 
-                          ? 'border-primary-500 bg-primary-500/10' 
-                          : 'border-gray-600 bg-gray-700'
-                      }`}
-                    >
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{effect.name}</div>
-                        <div className="text-xs text-gray-400 mt-1">
-                          {effect.active ? 'Active' : 'Inactive'}
-                        </div>
+          
+          <div className="space-y-6">
+            {/* Collaborators with Earnings */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-cyan-400" />
+                Collaborators & Revenue
+              </h2>
+              <div className="space-y-4">
+                {collaborators.map((collab) => (
+                  <div key={collab.id} className="bg-gray-800/50 rounded-lg p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+                        {collab.avatar}
                       </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-white font-medium">{collab.name}</p>
+                          <div className={`w-2 h-2 rounded-full ${
+                            collab.status === 'online' ? 'bg-green-400' :
+                            collab.status === 'recording' ? 'bg-red-400' : 'bg-gray-400'
+                          }`}></div>
+                        </div>
+                        <p className="text-gray-400 text-sm">{collab.role}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Contribution:</span>
+                        <span className="text-cyan-400 font-semibold">{collab.contribution}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Earnings:</span>
+                        <span className="text-green-400 font-semibold">${collab.earnings.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Chat Panel */}
+            {chatOpen && (
+              <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+                <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-green-400" />
+                  Collaboration Chat
+                </h2>
+                <div className="space-y-3 mb-4 max-h-40 overflow-y-auto">
+                  {chatMessages.map((msg, index) => (
+                    <div key={index} className="bg-gray-800/50 rounded-lg p-3">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="text-cyan-400 font-medium text-sm">{msg.user}</span>
+                        <span className="text-gray-500 text-xs">{msg.time}</span>
+                      </div>
+                      <p className="text-gray-300 text-sm">{msg.message}</p>
                     </div>
                   ))}
                 </div>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Type a message..."
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-500"
+                  />
+                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
+                    Send
+                  </button>
+                </div>
               </div>
-
-              {/* Mixer */}
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Master Mix</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Master Volume</label>
-                    <div className="flex items-center space-x-2">
-                      <div className="flex-1 bg-gray-600 rounded-full h-3">
-                        <div className="bg-primary-500 h-3 rounded-full" style={{ width: '75%' }}></div>
-                      </div>
-                      <span className="text-sm text-gray-300 w-8">75</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Tempo</label>
-                    <div className="flex items-center space-x-2">
-                      <input 
-                        type="number" 
-                        value="120" 
-                        className="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm w-20"
-                      />
-                      <span className="text-sm text-gray-400">BPM</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Key</label>
-                    <select className="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm w-full">
-                      <option>C Major</option>
-                      <option>G Major</option>
-                      <option>D Major</option>
-                      <option>A Major</option>
-                    </select>
-                  </div>
+            )}
+            
+            {/* Rights & Revenue */}
+            <div className="bg-gray-900/70 backdrop-blur-md rounded-xl p-6 border border-gray-700/50">
+              <h2 className="text-xl font-semibold text-white mb-4">Rights & Revenue</h2>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Your Share</span>
+                  <span className="text-cyan-400 font-semibold">25%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Smart Contract</span>
+                  <span className="text-green-400 text-sm">Active</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">NFT Minted</span>
+                  <span className="text-purple-400 text-sm">Live</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Royalty Rate</span>
+                  <span className="text-yellow-400 font-semibold">5%</span>
                 </div>
               </div>
             </div>
@@ -232,7 +332,7 @@ const Studio: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Studio
+export default Studio;
