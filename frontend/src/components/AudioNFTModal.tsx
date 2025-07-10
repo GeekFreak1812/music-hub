@@ -240,7 +240,7 @@ const AudioNFTModal = ({ isOpen, onClose, onMint }: AudioNFTModalProps) => {
                 type="text"
                 value={nftData.name}
                 onChange={(e) => setNftData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g., 'Cosmic Melody #1'"
+                placeholder="e.g., 'Cosmic #1'"
                 className="w-full bg-gray-800/50 border border-cyan-500/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
               />
             </div>

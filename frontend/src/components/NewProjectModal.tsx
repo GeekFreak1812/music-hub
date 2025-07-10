@@ -84,7 +84,7 @@ const NewProjectModal = ({ isOpen, onClose, onSubmit }: NewProjectModalProps) =>
               type="text"
               value={formData.trackName}
               onChange={(e) => setFormData(prev => ({ ...prev, trackName: e.target.value }))}
-              placeholder="Billie Jean"
+              placeholder="Elvis Presley"
               className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
               required
             />
@@ -98,7 +98,7 @@ const NewProjectModal = ({ isOpen, onClose, onSubmit }: NewProjectModalProps) =>
               type="text"
               value={formData.uploadedBy}
               onChange={(e) => setFormData(prev => ({ ...prev, uploadedBy: e.target.value }))}
-              placeholder="Preet"
+              placeholder="Robert"
               className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
               required
             />
