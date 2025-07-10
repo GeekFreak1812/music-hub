@@ -8,13 +8,13 @@
       "write_port_to": null
     },
     "state_manager": {
-      "state_root": "/home/manmohan/music-hub/.dfx/network/local/state/replicated_state"
+      "state_root": "/mnt/c/Users/SAIKESH/OneDrive/Desktop/music-hub/.dfx/network/local/state/replicated_state"
     },
     "crypto": {
-      "crypto_root": "/home/manmohan/music-hub/.dfx/network/local/state/crypto_store"
+      "crypto_root": "/mnt/c/Users/SAIKESH/OneDrive/Desktop/music-hub/.dfx/network/local/state/crypto_store"
     },
     "artifact_pool": {
-      "consensus_pool_path": "/home/manmohan/music-hub/.dfx/network/local/state/consensus_pool"
+      "consensus_pool_path": "/mnt/c/Users/SAIKESH/OneDrive/Desktop/music-hub/.dfx/network/local/state/consensus_pool"
     },
     "subnet_type": "application",
     "btc_adapter": {

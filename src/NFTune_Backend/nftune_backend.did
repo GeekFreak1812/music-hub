@@ -1,0 +1,102 @@
+type User = record {
+  principal : principal;
+  name : opt text;
+  email : text;
+  avatar_url : opt text;
+  created_at : nat64;
+};
+
+type Project = record {
+  id : text;
+  owner : principal;
+  name : text;
+  description : opt text;
+  collaborators : vec text;
+  tracks : vec text;
+  nfts : vec text;
+  created_at : nat64;
+  updated_at : nat64;
+};
+
+type TrackStatus = variant {
+  Draft;
+  Recording;
+  Mixing;
+  Completed;
+};
+
+type Track = record {
+  id : text;
+  project_id : text;
+  name : text;
+  ipfs_hash : text;
+  duration : nat64;
+  status : TrackStatus;
+  created_at : nat64;
+};
+
+type NFT = record {
+  id : text;
+  project_id : text;
+  creator : principal;
+  title : text;
+  description : opt text;
+  price : opt nat64;
+  royalty_percentage : nat8;
+  metadata_uri : text;
+  token_id : opt text;
+  contract_address : opt text;
+  is_minted : bool;
+  is_listed : bool;
+  opensea_url : opt text;
+  created_at : nat64;
+  updated_at : nat64;
+};
+
+type Collaboration = record {
+  id : text;
+  project_id : text;
+  user_principal : principal;
+  contribution_percentage : nat8;
+  role : text;
+  joined_at : nat64;
+};
+
+type Result_User = variant { Ok : User; Err : text };
+type Result_Project = variant { Ok : Project; Err : text };
+type Result_Track = variant { Ok : Track; Err : text };
+type Result_NFT = variant { Ok : NFT; Err : text };
+type Result_Collaboration = variant { Ok : Collaboration; Err : text };
+type Result_Void = variant { Ok; Err : text };
+
+service : {
+  // Authentication
+  register_user : (opt text, text) -> (Result_User);
+  get_user : () -> (Result_User) query;
+  
+  // Projects
+  create_project : (text, opt text) -> (Result_Project);
+  get_projects : () -> (vec Project) query;
+  get_project : (text) -> (Result_Project) query;
+  update_project : (text, opt text, opt text) -> (Result_Project);
+  
+  // Tracks
+  add_track : (text, text, text, nat64) -> (Result_Track);
+  get_project_tracks : (text) -> (vec Track) query;
+  
+  // NFTs
+  create_nft : (text, text, opt text, opt nat64, nat8, text) -> (Result_NFT);
+  get_nfts : () -> (vec NFT) query;
+  get_nft : (text) -> (Result_NFT) query;
+  get_project_nfts : (text) -> (vec NFT) query;
+  mint_nft : (text, text, text) -> (Result_NFT);
+  
+  // Collaborations
+  add_collaborator : (text, principal, nat8, text) -> (Result_Collaboration);
+  get_project_collaborators : (text) -> (vec Collaboration) query;
+  remove_collaborator : (text, text) -> (Result_Void);
+  
+  // System
+  get_canister_id : () -> (principal) query;
+  get_caller : () -> (principal) query;
+}
