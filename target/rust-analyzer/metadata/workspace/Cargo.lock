@@ -420,13 +420,16 @@ name = "nftune_backend"
 version = "0.1.0"
 dependencies = [
  "candid",
+ "getrandom",
  "ic-cdk",
  "ic-cdk-timers",
  "ic-stable-structures",
+ "js-sys",
  "serde",
  "serde_json",
  "sha2",
  "uuid",
+ "wasm-bindgen",
 ]
 
 [[package]]

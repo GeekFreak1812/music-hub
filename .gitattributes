@@ -1,10 +1,10 @@
-# Include frontend files in language stats
-/frontend/src/**/*.js linguist-detectable
-/frontend/src/**/*.jsx linguist-detectable
-/frontend/src/**/*.ts linguist-detectable
-/frontend/src/**/*.tsx linguist-detectable
-/frontend/src/**/*.css linguist-detectable
-/frontend/src/**/*.html linguist-detectable
+# Mark frontend files as detectable
+frontend/** linguist-detectable
 
-# Optional: Force GitHub to classify frontend folder as JavaScript
-frontend/ linguist-language=JavaScript
+# Optional: force language for specific file types
+frontend/**/*.js linguist-language=JavaScript
+frontend/**/*.jsx linguist-language=JavaScript
+frontend/**/*.ts linguist-language=TypeScript
+frontend/**/*.tsx linguist-language=TypeScript
+frontend/**/*.css linguist-language=CSS
+frontend/**/*.html linguist-language=HTML
