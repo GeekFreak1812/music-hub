@@ -243,7 +243,7 @@ const Index = () => {
           {/* Bottom Footer */}
           <div className="border-t border-gray-700/50 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center">
             <p className="text-gray-400 text-sm sm:text-base">
-              © 2024 NFTune. All rights reserved. Built on ICP Blockchain.
+              © 2025 NFTune. All rights reserved. Built on ICP Blockchain.
             </p>
           </div>
         </div>
