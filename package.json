@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "github-linguist": "^2.4.4",
     "i": "^0.3.7"
   }
 }
