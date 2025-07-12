@@ -1,10 +1,14 @@
-# Mark frontend files as detectable
-frontend/** linguist-detectable
-
-# Optional: force language for specific file types
-frontend/**/*.js linguist-language=JavaScript
-frontend/**/*.jsx linguist-language=JavaScript
-frontend/**/*.ts linguist-language=TypeScript
+# Make frontend files count properly
 frontend/**/*.tsx linguist-language=TypeScript
+frontend/**/*.ts linguist-language=TypeScript
+frontend/**/*.jsx linguist-language=JavaScript
+frontend/**/*.js linguist-language=JavaScript
 frontend/**/*.css linguist-language=CSS
 frontend/**/*.html linguist-language=HTML
+
+# Don't count generated files
+node_modules/ linguist-vendored
+target/ linguist-vendored
+dist/ linguist-vendored
+build/ linguist-vendored
+*.lock linguist-generated

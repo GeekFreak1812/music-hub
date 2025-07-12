@@ -1,0 +1,7 @@
+# Don't track generated files
+node_modules/
+target/
+dist/
+build/
+*.lock
+.env*
